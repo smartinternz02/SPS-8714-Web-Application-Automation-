@@ -1,0 +1,145 @@
+﻿<process name="Web Automation T2 Process" version="1.0" bpversion="6.10.0.30674" narrative="Web automation to get the values from excel sheet" byrefcollection="true" preferredid="96ec7e15-ba93-47de-ae69-6fdd159144ac">
+  <view>
+    <camerax>67</camerax>
+    <cameray>32</cameray>
+    <zoom version="2">1.25</zoom>
+  </view>
+  <preconditions />
+  <endpoint narrative="" />
+  <stage stageid="fd57905d-13b7-437b-8548-5ff4be745d5c" name="Start" type="Start">
+    <display x="-45" y="-105" />
+    <onsuccess>79ff6a45-6d57-4b5c-818d-473d1d0a9aca</onsuccess>
+  </stage>
+  <stage stageid="afd52aa8-45cd-4da1-9521-20e9bfaf07f6" name="End" type="End">
+    <display x="-15" y="180" />
+  </stage>
+  <stage stageid="5e584a49-94ae-4bd5-b60b-50dedb6130ef" name="Stage1" type="ProcessInfo">
+    <display x="-195" y="-105" w="150" h="90" />
+  </stage>
+  <stage stageid="afde92fc-6c66-44a5-965f-bb5a38f3d208" name="handle" type="Data">
+    <loginhibit onsuccess="true" />
+    <display x="105" y="-120" />
+    <datatype>number</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="ef46c571-5a48-4fbc-9cec-b16edb2acb0b" name="Workbook name" type="Data">
+    <loginhibit onsuccess="true" />
+    <display x="165" y="-120" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="c975ecec-2601-434a-8ee0-b0877cf5280f" name="Data" type="Collection">
+    <display x="240" y="-120" />
+    <datatype>collection</datatype>
+    <private />
+    <alwaysinit />
+    <collectioninfo>
+      <field name="Value" type="number" />
+      <field name="Currency" type="text" />
+      <field name="INR" type="text" />
+    </collectioninfo>
+  </stage>
+  <stage stageid="79ff6a45-6d57-4b5c-818d-473d1d0a9aca" name="Create XL instance" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-45" y="45" />
+    <inputs>
+      <input type="flag" name="Enable Events" friendlyname="Enable Events" narrative="Flag to indicate that events should be enabled / disabled on the attached instance - defaulted to True" expr="&quot;True&quot;" />
+    </inputs>
+    <outputs>
+      <output type="number" name="handle" friendlyname="handle" narrative="An integer which can be used to identify the created instance in subsequent actions" stage="handle" />
+    </outputs>
+    <onsuccess>6bd7d983-e0f2-4e2d-8aee-311dda939e54</onsuccess>
+    <resource object="MS Excel VBO" action="Create Instance" />
+  </stage>
+  <stage stageid="6bd7d983-e0f2-4e2d-8aee-311dda939e54" name="Open Work Book" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="60" y="45" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the required workbook should be opened. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="File name" friendlyname="File name" narrative="The path and name of the file which should be opened." expr="&quot;D:\RPA WORK\Book1.xlsx&quot;" />
+    </inputs>
+    <outputs>
+      <output type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name used by Excel to identify the workbook - usually this is the file name (without the path)." stage="Workbook name" />
+    </outputs>
+    <onsuccess>a21c2012-e3b3-40a4-836a-764bf306b98f</onsuccess>
+    <resource object="MS Excel VBO" action="Open Workbook" />
+  </stage>
+  <stage stageid="a21c2012-e3b3-40a4-836a-764bf306b98f" name="Read from WorkBook" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="165" y="45" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the worksheet which should be retrieved resides. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook which contains the sheet required. The default empty text indicates the currently active workbook on the specified instance." expr="[Workbook name]" />
+      <input type="text" name="Worksheet Name" friendlyname="Worksheet Name" narrative="The name of the worksheet within the specified workbook which should be written to a collection. The default empty text indicates the currently active worksheet within the specified workbook." expr="&quot;Sheet1&quot;" />
+      <input type="text" name="Fetch Data With Method" friendlyname="Fetch Data With Method" narrative="The method used to fetch data from cells in the worksheet. Options include Text, Value, and Value2. The default indicates Value will be used." expr="" />
+    </inputs>
+    <outputs>
+      <output type="collection" name="Data" friendlyname="Data" narrative="The collection containing the data from the specified worksheet - the column IDs will be gleaned from the first row on the sheet being retrieved." stage="Data" />
+    </outputs>
+    <onsuccess>11c18d28-7e6f-4623-be1a-e6a0f9c1fcaf</onsuccess>
+    <resource object="MS Excel VBO" action="Get Worksheet As Collection" />
+  </stage>
+  <stage stageid="11c18d28-7e6f-4623-be1a-e6a0f9c1fcaf" name="Launch" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="255" y="45" />
+    <onsuccess>3f5d9917-73c1-4e08-98d5-08104b76da24</onsuccess>
+    <resource object="Web Automation with Excel" action="Launch" />
+  </stage>
+  <stage stageid="be9fa7d3-47e5-4c6c-bda7-dc1c90d72429" name="Enter Data" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="345" y="120" />
+    <inputs>
+      <input type="number" name="Input Value" friendlyname="Input Value" expr="[Data.Value]" />
+      <input type="text" name="Form Currency" friendlyname="Form Currency" expr="[Data.Currency]" />
+      <input type="text" name="To Currency" friendlyname="To Currency" expr="&quot;INR&quot;" />
+    </inputs>
+    <outputs>
+      <output type="text" name="Convert Data" friendlyname="Convert Data" stage="Data.INR" />
+    </outputs>
+    <onsuccess>a7716b22-e2a2-4ceb-90dd-39e5470adfd5</onsuccess>
+    <resource object="Web Automation with Excel" action="Input Value" />
+  </stage>
+  <stage stageid="3f5d9917-73c1-4e08-98d5-08104b76da24" name="Loop Start1" type="LoopStart">
+    <loginhibit onsuccess="true" />
+    <display x="345" y="45" />
+    <onsuccess>be9fa7d3-47e5-4c6c-bda7-dc1c90d72429</onsuccess>
+    <groupid>7b88fa3f-1cbc-4341-be81-c8b461d7f5eb</groupid>
+    <looptype>ForEach</looptype>
+    <loopdata>Data</loopdata>
+  </stage>
+  <stage stageid="a7716b22-e2a2-4ceb-90dd-39e5470adfd5" name="Loop End1" type="LoopEnd">
+    <loginhibit onsuccess="true" />
+    <display x="345" y="180" />
+    <onsuccess>3c0e5e47-97ce-4438-a583-96af4aee5a9f</onsuccess>
+    <groupid>7b88fa3f-1cbc-4341-be81-c8b461d7f5eb</groupid>
+  </stage>
+  <stage stageid="3c0e5e47-97ce-4438-a583-96af4aee5a9f" name="Update XI" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="255" y="180" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the specified collection should be written. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook within which the data should be written. The default empty value indicates the current workbook within the specified instance." expr="[Workbook name]" />
+      <input type="text" name="Worksheet Name" friendlyname="Worksheet Name" narrative="The name of the worksheet on which the given data should be written. The default empty value indicates the current sheet within the specified workbook." expr="&quot;Sheet1&quot;" />
+      <input type="collection" name="Collection" friendlyname="Collection" narrative="The collection containing the data which should be written to the worksheet." expr="[Data]" />
+      <input type="text" name="Cell Reference" friendlyname="Cell Reference" narrative="The reference at which the collection should be written." expr="&quot;A3&quot;" />
+      <input type="flag" name="Include Column Names" friendlyname="Include Column Names" narrative="True to indicate that the column names from the collection should be written out as the first row; False to ignore the column names and just write out the data." expr="&quot;False&quot;" />
+    </inputs>
+    <onsuccess>0bee67a9-8f09-4b33-b08d-8fe8e3df7da9</onsuccess>
+    <resource object="MS Excel VBO" action="Write Collection" />
+  </stage>
+  <stage stageid="0bee67a9-8f09-4b33-b08d-8fe8e3df7da9" name="Save &amp; Close" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="135" y="180" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the workbook which should be closed resides. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook which should be closed." expr="[Workbook name]" />
+      <input type="flag" name="Save Data" friendlyname="Save Data" narrative="True to save the data before closing the workbook; The default of False will discard any changes before closing the workbook." expr="&quot;True&quot;" />
+    </inputs>
+    <onsuccess>afd52aa8-45cd-4da1-9521-20e9bfaf07f6</onsuccess>
+    <resource object="MS Excel VBO" action="Close Workbook" />
+  </stage>
+</process>
